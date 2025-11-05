@@ -5,7 +5,6 @@ import math
 # Type alias for readability
 Record = Dict[str, Optional[float]]
 
-
 # BASIC STATISTICS
 
 def basic_stats(rows: List[Record], key: str) -> Dict[str, float]:

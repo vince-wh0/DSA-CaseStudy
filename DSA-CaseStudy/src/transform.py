@@ -7,12 +7,10 @@ SCORE_KEY_MAP = {
     "attendance": "attendance_score"
 }
 
-
 def get_letter_grade(score, grading_scale):
     """Assigns a letter grade using the configuration's grading scale."""
     if score is None:
      return 'N/A'
-
 
 sorted_scale = sorted(grading_scale.items(), key=lambda item: item[1], reverse=True)
 
@@ -21,7 +19,6 @@ sorted_scale = sorted(grading_scale.items(), key=lambda item: item[1], reverse=T
     return grade
 
 return 'F'
-
 
 def compute_final_score(record, grade_weights):
     """Calculates the weighted final score based on config weights and key mapping."""
@@ -57,12 +54,10 @@ def set_risk_status(record, at_risk_threshold):
 def transform_records(records, config):
     """Main transformation function: computes final score, letter grade, and risk status."""
     print("--- Starting Data Transformation (Calculating Scores and Grades) ---")
-
    
     grade_weights = config.get('grade_weights', {})
     grading_scale = config.get('grading_scale', {})
     at_risk_threshold = config.get('thresholds', {}).get('at_risk_grade', 60.0)
-
     
     for record in records:
  

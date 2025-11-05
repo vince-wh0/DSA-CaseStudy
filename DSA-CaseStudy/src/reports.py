@@ -2,7 +2,6 @@ import csv
 import os
 from typing import List, Dict, Any
 
-
 def print_summary_report(summary_stats: Dict[str, Any]) -> None:
     print("\nCOURSE PERFORMANCE SUMMARY")
     if not summary_stats:
