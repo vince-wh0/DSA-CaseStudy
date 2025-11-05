@@ -1,4 +1,3 @@
-# src/ingest.py
 import csv
 
 def load_csv(filename):
