@@ -1,9 +1,9 @@
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any
 from statistics import mean
 import math
 
 # Type alias for readability
-Record = Dict[str, Optional[float]]
+Record = Dict[str, Any]
 
 # BASIC STATISTICS
 
@@ -33,10 +33,9 @@ def _percentile(sorted_values: List[float], p: float) -> float:
     c = math.ceil(k)
     if f == c:
         return round(sorted_values[int(k)], 2)
-    d0 = sorted_values[f] * (c - k)
-    d1 = sorted_values[c] * (k - f)
+    d0 = sorted_values[int(f)] * (c - k) 
+    d1 = sorted_values[int(c)] * (k - f) 
     return round(d0 + d1, 2)
-
 
 def compute_percentiles(rows: List[Record], key: str) -> Dict[str, float]:
     
@@ -74,8 +73,11 @@ def detect_outliers(rows: List[Record], key: str) -> List[Record]:
 # AT-RISK STUDENTS
 
 def at_risk_students(rows: List[Record], threshold: float) -> List[Record]:
-    
-    return [r for r in rows if (r.get("final_score") or 0) < threshold]
+    return [
+        r for r in rows
+        if isinstance(r.get("final_score"), (int, float))
+        and r["final_score"] < threshold
+    ]
 
 # SECTION-BASED SUMMARY
 
@@ -84,7 +86,7 @@ def section_summary(rows: List[Record]) -> Dict[str, Dict[str, float]]:
     sections: Dict[str, List[float]] = {}
 
     for r in rows:
-        sec = r.get("section", "Unknown")
+        sec = str(r.get("section", "Unknown"))
         score = r.get("final_score")
         if isinstance(score, (int, float)):
             sections.setdefault(sec, []).append(score)
@@ -94,3 +96,24 @@ def section_summary(rows: List[Record]) -> Dict[str, Dict[str, float]]:
         summary[sec] = {"mean": round(mean(scores), 2)} if scores else {"mean": 0.0}
 
     return summary
+
+# --- NEW FUNCTION ---
+def get_class_statistics(rows: List[Record]) -> Dict[str, Any]:
+    stats = {}
+    
+    # Get basic stats for the final score
+    score_stats = basic_stats(rows, 'final_score')
+    stats['class_average'] = score_stats.get('mean')
+    stats['class_min_score'] = score_stats.get('min')
+    stats['class_max_score'] = score_stats.get('max')
+    
+    # Get percentiles for the final score
+    percentiles = compute_percentiles(rows, 'final_score')
+    stats['median_score (50th)'] = percentiles.get('50th')
+    stats['25th_percentile'] = percentiles.get('25th')
+    stats['75th_percentile'] = percentiles.get('75th')
+
+    # Get section averages
+    stats['section_averages'] = section_summary(rows)
+    
+    return stats
