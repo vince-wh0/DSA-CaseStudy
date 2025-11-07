@@ -27,6 +27,12 @@ def plot_grade_distribution(rows: List[Record], output_dir: str):
         print("No valid scores available. Cannot generate plot.")
         return
         
+    # Convert to numpy array for easier calculations
+    scores_arr = np.array(scores)
+
+    # 2. Calculate mean
+    mean_score = np.mean(scores_arr)
+
     # Set up the plot
     plt.figure(figsize=(10, 6))
     
@@ -42,6 +48,9 @@ def plot_grade_distribution(rows: List[Record], output_dir: str):
         plt.plot(x, p, 'k', linewidth=2, label='Normal Distribution Fit (Curve)')
     except Exception as e:
         print(f"Warning: Could not fit normal distribution curve. {e}")
+
+    # Add vertical lines for mean
+    plt.axvline(mean_score, color='r', linestyle='dashed', linewidth=2, label=f'Mean: {mean_score:.2f}')
 
     # Add titles and labels
     title = f"Grade Distribution (n={len(scores)}) - $\mu={mu:.2f}$, $\sigma={std:.2f}$"
