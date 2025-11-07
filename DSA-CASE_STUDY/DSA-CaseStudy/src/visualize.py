@@ -30,7 +30,7 @@ def plot_grade_distribution(rows: List[Record], output_dir: str):
     # Convert to numpy array for easier calculations
     scores_arr = np.array(scores)
 
-    # 2. Calculate mean
+    #  Calculate mean
     mean_score = np.mean(scores_arr)
 
     # Set up the plot
@@ -110,7 +110,7 @@ def plot_section_comparison(comparison_stats: Dict[str, Dict[str, Any]], output_
         yval = bar.get_height()
         plt.text(bar.get_x() + bar.get_width()/2.0, yval + 1.0, f'{yval:.2f}', ha='center', va='bottom')
 
-    # 5. Save the plot
+    #  Save the plot
     os.makedirs(output_dir, exist_ok=True)
     plot_path = os.path.join(output_dir, "section_comparison_barchart.png")
     
