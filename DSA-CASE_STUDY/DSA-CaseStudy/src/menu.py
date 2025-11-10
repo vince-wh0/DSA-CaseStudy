@@ -74,29 +74,59 @@ def view_all_students(students_list: List[Student]):
 
 
 def add_student(students_list: List[Student]):
-    # Prompts user to add a new student record to the in-memory list.
+    """Prompts user to add a new student record to the in-memory list."""
     print("\n--- Add New Student ---")
     
+    # Validate student ID
     while True:
         student_id = input("Enter Student ID: ").strip()
         if not student_id:
-            print("Student ID cannot be empty.")
+            print("Error: Student ID cannot be empty.")
             continue
-            
+        if not student_id.isalnum():
+            print("Error: Student ID must be letters and/or numbers only.")
+            continue
         if any(s.get('student_id') == student_id for s in students_list):
             print(f"Error: Student ID {student_id} already exists. Please use a unique ID.")
+            continue
+        break
+    
+    # Validate last name
+    while True:
+        last_name = input("Enter Last Name: ").strip()
+        if not last_name:
+            print("Error: Last Name cannot be empty.")
+        elif not last_name.replace(" ", "").isalpha():
+            print("Error: Last Name must contain letters only.")
         else:
             break
-            
-    last_name = input("Enter Last Name: ").strip()
-    first_name = input("Enter First Name: ").strip()
-    section = input("Enter Section: ").strip()
     
+    # Validate first name
+    while True:
+        first_name = input("Enter First Name: ").strip()
+        if not first_name:
+            print("Error: First Name cannot be empty.")
+        elif not first_name.replace(" ", "").isalpha():
+            print("Error: First Name must contain letters only.")
+        else:
+            break
+
+    # Validate section
+    while True:
+        section = input("Enter Section: ").strip()
+        if not section:
+            print("Error: Section cannot be empty.")
+        elif not section.replace("-", "").isalnum():
+            print("Error: Section should only contain letters, numbers, or '-' characters.")
+        else:
+            break
+    
+    # Create student record
     new_student: Student = {
         'student_id': student_id,
-        'last_name': last_name,
-        'first_name': first_name,
-        'section': section,
+        'last_name': last_name.title(),
+        'first_name': first_name.title(),
+        'section': section.upper(),
         'quiz1': None, 'quiz2': None, 'quiz3': None, 'quiz4': None, 'quiz5': None,
         'midterm': None,
         'final': None,
@@ -104,10 +134,10 @@ def add_student(students_list: List[Student]):
     }
     
     students_list.append(new_student)
-    
-    print(f"Success: Added {first_name} {last_name} (ID: {student_id}) to the roster.")
+    print(f"\nSuccess: Added {first_name.title()} {last_name.title()} (ID: {student_id}) to the roster.")
     print("Note: New student has no grades. Run report to see 'N/A'.")
-
+    
+    
 def delete_student(students_list: List[Student]):
     # Prompts user to delete a student by ID from the in-memory list.
     
